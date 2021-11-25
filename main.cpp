@@ -138,7 +138,7 @@ void task_3(){
                 char* buffer=new char[n+1]; buffer[n]=0;
                 fin.read(buffer,n);
                 for (int i = 0; i < n; ++i) {
-                    if(std::tolower(buffer[i]) =='а'){
+                    if(std::tolower(buffer[i]) == j){
                         ++count;
                     }
                 }
