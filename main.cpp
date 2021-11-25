@@ -17,9 +17,9 @@ struct Less {
 };
 
 template <class Cmp>
-struct Cmp_ptr {
+struct CmpPtr {
     Cmp cmp;
-    Cmp_ptr() = default;
+    CmpPtr() = default;
 
     template <class T>
     bool operator()(T first, T second) const {
@@ -30,7 +30,7 @@ struct Cmp_ptr {
 template <class T>
 auto SortPointers(std::vector<T*> &vec){
 
-    std::sort(vec.begin(), vec.end(), Cmp_ptr<Less>());
+    std::sort(vec.begin(), vec.end(), CmpPtr<Less>());
 
 }
 
@@ -88,7 +88,7 @@ void task_2(){
 
 int main() {
     //task_1();
-    task_2();
+    //task_2();
 
     return 0;
 }
