@@ -1,6 +1,8 @@
 #include <iostream>
 #include <vector>
 #include <algorithm>
+#include <fstream>
+#include <chrono>
 
 template <class T>
 auto Swap(T &t1, T &t2){
@@ -44,6 +46,33 @@ auto PrintVec(std::vector<T*> &vec){
 }
 //--------------/task2---
 
+class Timer
+{
+private:
+    using clock_t = std::chrono::high_resolution_clock;
+    using second_t = std::chrono::duration<double, std::ratio<1> >;
+
+    std::string m_name;
+    std::chrono::time_point<clock_t> m_beg;
+    double elapsed() const
+    {
+        return std::chrono::duration_cast<second_t>(clock_t::now() -m_beg).count();
+    }
+
+public:
+    Timer() : m_beg(clock_t::now()) { }
+    Timer(std::string name) : m_name(name), m_beg(clock_t::now()) { }
+
+    void start(std::string name) {
+        m_name = name;
+        m_beg = clock_t::now();
+    }
+    void print() const {
+        std::cout << m_name << ":\t" << elapsed() * 1000 << " ms" << '\n';
+    }
+};
+
+
 void task_1(){
     int first = 2;
     int second = 3;
@@ -85,10 +114,49 @@ void task_2(){
 */
 }
 
+void task_3(){
+    //setlocale(LC_ALL, "ru");
+
+    {
+        // 2 цикла for
+        Timer timer("for-for");
+        std::string path = "War and Peace.txt";
+        std::ifstream fin;
+        fin.open(path);
+        if(!fin.is_open()){
+            std::cout << "Error, file not opened!" << std::endl;
+            return;
+        }
+        int count = 0;
+        char lang[6] = {'a', 'e', 'i', 'o', 'u', 'y'};
+        for(char j : lang){
+            count = 0;
+            fin.seekg(0,std::ifstream::beg);
+            while(!fin.eof()){
+                int n=100;
+                char* buffer=new char[n+1]; buffer[n]=0;
+                fin.read(buffer,n);
+                for (int i = 0; i < n; ++i) {
+                    if(std::tolower(buffer[i]) == j){
+                        ++count;
+                    }
+                }
+                delete [] buffer;
+            }
+            fin.clear();
+            std::cout << j << ": " << count << std::endl;
+        }
+        timer.print();
+    }
+
+}
+
+
 
 int main() {
     //task_1();
     //task_2();
+    task_3();
 
     return 0;
 }
