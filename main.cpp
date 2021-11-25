@@ -35,7 +35,7 @@ auto SortPointers(std::vector<T*> &vec){
 }
 
 template <class T>
-auto PrintVec(std::vector<T> &vec){
+auto PrintVec(std::vector<T*> &vec){
     std::cout << "Print vector: ";
     for(auto *elem : vec){
         std::cout << *elem << " ";
@@ -88,7 +88,7 @@ void task_2(){
 
 int main() {
     //task_1();
-    //task_2();
+    task_2();
 
     return 0;
 }
