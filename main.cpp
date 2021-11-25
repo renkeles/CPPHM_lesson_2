@@ -116,6 +116,7 @@ void task_2(){
 
 void task_3(){
     //setlocale(LC_ALL, "ru");
+    //Русские буквы при сравнении выкидывают ошибку "Character too large for enclosing character literal type"
 
     {
         // 2 цикла for
@@ -137,7 +138,7 @@ void task_3(){
                 char* buffer=new char[n+1]; buffer[n]=0;
                 fin.read(buffer,n);
                 for (int i = 0; i < n; ++i) {
-                    if(std::tolower(buffer[i]) == j){
+                    if(std::tolower(buffer[i]) =='а'){
                         ++count;
                     }
                 }
