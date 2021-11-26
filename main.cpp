@@ -72,17 +72,15 @@ public:
     }
 };
 
-template<class InputIt, class T>
-InputIt find(InputIt first, InputIt last, const T& value)
-{
-    for (; first != last; ++first) {
-        if (*first == value) {
-            return first;
-        }
-    }
-    return last;
-}
 
+struct Dict{
+    char letter;
+    int count;
+
+    Dict(char ch, int c) : letter(ch), count(c){
+
+    }
+};
 
 void task_1(){
     int first = 2;
@@ -125,15 +123,6 @@ void task_2(){
 */
 }
 
-struct Dict{
-        std::string letter;
-        int count;
-
-        Dict(std::string l, int c) : letter(l), count(c){
-
-        }
-        };
-
 void task_3(){
     //setlocale(LC_ALL, "ru");
     //Русские буквы при сравнении выкидывают ошибку "Character too large for enclosing character literal type"
@@ -170,7 +159,7 @@ void task_3(){
         fin.close();
         timer.print();
     }
-    
+
 
     {
         // for-find
@@ -196,9 +185,10 @@ void task_3(){
         }
         buffer = nullptr;
         delete [] buffer;
+        fin.close();
 
         std::string l = "aeiouy";
-        std::vector<Dict> dict{Dict{"a", 0}, Dict{"e", 0}, Dict{"i", 0}, Dict{"o", 0}, Dict{"u", 0},  Dict{"y", 0}};
+        std::vector<Dict> dict{Dict{'a', 0}, Dict{'e', 0}, Dict{'i', 0}, Dict{'o', 0}, Dict{'u', 0},  Dict{'y', 0}};
         std::sort(vec.begin(), vec.end());
         for(auto &elem : vec){
             auto item{std::find(l.begin(), l.end(), elem)};
@@ -237,7 +227,86 @@ void task_3(){
         for (auto &elem : dict){
             std::cout << elem.letter << ": " << elem.count << std::endl;
         }
+        timer.print();
+    }
+
+
+    {
+        //for-count_if
+        Timer timer("for-count_if");
+        std::string path = "War and Peace.txt";
+        std::ifstream fin;
+        fin.open(path);
+        if(!fin.is_open()){
+            std::cout << "Error, file not opened!" << std::endl;
+            return;
+        }
+        std::vector<char> vec;
+        char* buffer = nullptr;
+        while(!fin.eof()){
+            int n=100;
+            buffer = new char[n+1]; buffer[n]='\0';
+            fin.read(buffer,n);
+            for (int i{0}; i < n; ++i) {
+                vec.push_back(std::tolower(buffer[i]));
+            }
+
+        }
+        buffer = nullptr;
+        delete [] buffer;
         fin.close();
+
+        std::vector<Dict> dict{Dict{'a', 0}, Dict{'e', 0}, Dict{'i', 0}, Dict{'o', 0}, Dict{'u', 0},  Dict{'y', 0}};
+
+        for(int i{0}; i < 6; ++i){
+            dict[i].count = std::count_if(vec.begin(), vec.end(), [dict, i](char ch) {
+                return dict[i].letter == ch;
+            });
+        }
+
+        for (auto &elem : dict){
+            std::cout << elem.letter << ": " << elem.count << std::endl;
+        }
+        timer.print();
+    }
+
+
+    {
+        //count_if-find
+        Timer timer("count_if-find");
+        std::string path = "War and Peace.txt";
+        std::ifstream fin;
+        fin.open(path);
+        if(!fin.is_open()){
+            std::cout << "Error, file not opened!" << std::endl;
+            return;
+        }
+        std::vector<char> vec;
+        char* buffer = nullptr;
+        while(!fin.eof()){
+            int n=100;
+            buffer = new char[n+1]; buffer[n]='\0';
+            fin.read(buffer,n);
+            for (int i{0}; i < n; ++i) {
+                vec.push_back(std::tolower(buffer[i]));
+            }
+
+        }
+        buffer = nullptr;
+        delete [] buffer;
+        fin.close();
+
+        std::vector<Dict> dict{Dict{'a', 0}, Dict{'e', 0}, Dict{'i', 0}, Dict{'o', 0}, Dict{'u', 0},  Dict{'y', 0}};
+
+        for(int i{0}; i < 6; ++i){
+            dict[i].count = std::count_if(vec.begin(), vec.end(), [dict, i](char ch) {
+                return dict[i].letter == ch;
+            });
+        }
+
+        for (auto &elem : dict){
+            std::cout << elem.letter << ": " << elem.count << std::endl;
+        }
         timer.print();
     }
 
