@@ -137,6 +137,7 @@ void task_3(){
             std::cout << "Error, file not opened!" << std::endl;
             return;
         }
+        int sum = 0;
         int count = 0;
         char lang[6] = {'a', 'e', 'i', 'o', 'u', 'y'};
         for(char j : lang){
@@ -154,9 +155,11 @@ void task_3(){
                 delete [] buffer;
             }
             fin.clear();
+            sum += count;
             std::cout << j << ": " << count << std::endl;
         }
         fin.close();
+        std::cout << "ALL: " << sum << std::endl;
         timer.print();
     }
 
@@ -224,9 +227,14 @@ void task_3(){
                 }
             }
         }
+        int sum = 0;
+        for(int i{0}; i < dict.size(); ++i){
+            sum += dict[i].count;
+        }
         for (auto &elem : dict){
             std::cout << elem.letter << ": " << elem.count << std::endl;
         }
+        std::cout << "ALL: " << sum << std::endl;
         timer.print();
     }
 
@@ -267,6 +275,11 @@ void task_3(){
         for (auto &elem : dict){
             std::cout << elem.letter << ": " << elem.count << std::endl;
         }
+        int sum = 0;
+        for(int i{0}; i < dict.size(); ++i){
+            sum += dict[i].count;
+        }
+        std::cout << "ALL: " << sum << std::endl;
         timer.print();
     }
 
@@ -296,17 +309,28 @@ void task_3(){
         delete [] buffer;
         fin.close();
 
+        std::string l = "aeiouy";
         std::vector<Dict> dict{Dict{'a', 0}, Dict{'e', 0}, Dict{'i', 0}, Dict{'o', 0}, Dict{'u', 0},  Dict{'y', 0}};
-
-        for(int i{0}; i < 6; ++i){
-            dict[i].count = std::count_if(vec.begin(), vec.end(), [dict, i](char ch) {
-                return dict[i].letter == ch;
+        int count = std::count_if(vec.begin(), vec.end(), [l](const auto& letter){
+            auto iterFind{std::find(l.begin(), l.end(), letter)};
+            bool isV{iterFind != l.end()};
+            return isV;
+        });
+        //----------------------For FUN---
+        std::string str = "";
+        for(int i{0}; i < 6; i++){
+            str = l[i];
+            dict[i].count = std::count_if(vec.begin(), vec.end(), [str](const auto& letter){
+                auto iterFind{std::find(str.begin(), str.end(), letter)};
+                bool isV{iterFind != str.end()};
+                return isV;
             });
         }
-
+        //----------------------For FUN---
         for (auto &elem : dict){
             std::cout << elem.letter << ": " << elem.count << std::endl;
         }
+        std::cout << "ALL: " << count << std::endl;
         timer.print();
     }
 
