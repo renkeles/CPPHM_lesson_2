@@ -72,6 +72,17 @@ public:
     }
 };
 
+template<class InputIt, class T>
+InputIt find(InputIt first, InputIt last, const T& value)
+{
+    for (; first != last; ++first) {
+        if (*first == value) {
+            return first;
+        }
+    }
+    return last;
+}
+
 
 void task_1(){
     int first = 2;
@@ -114,6 +125,15 @@ void task_2(){
 */
 }
 
+struct Dict{
+        std::string letter;
+        int count;
+
+        Dict(std::string l, int c) : letter(l), count(c){
+
+        }
+        };
+
 void task_3(){
     //setlocale(LC_ALL, "ru");
     //Русские буквы при сравнении выкидывают ошибку "Character too large for enclosing character literal type"
@@ -147,6 +167,77 @@ void task_3(){
             fin.clear();
             std::cout << j << ": " << count << std::endl;
         }
+        fin.close();
+        timer.print();
+    }
+    
+
+    {
+        // for-find
+        Timer timer("for-find");
+        std::string path = "War and Peace.txt";
+        std::ifstream fin;
+        fin.open(path);
+        if(!fin.is_open()){
+            std::cout << "Error, file not opened!" << std::endl;
+            return;
+        }
+        std::vector<char> vec;
+        char* buffer = nullptr;
+        while(!fin.eof()){
+            int n=100;
+            buffer = new char[n+1]; buffer[n]='\0';
+            fin.read(buffer,n);
+            for (int i{0}; i < n; ++i) {
+                //vec.emplace_back(std::tolower(buffer[i]));      // 31.6778 ms
+                vec.push_back(std::tolower(buffer[i]));           // 15.9473 ms
+            }
+
+        }
+        buffer = nullptr;
+        delete [] buffer;
+
+        std::string l = "aeiouy";
+        std::vector<Dict> dict{Dict{"a", 0}, Dict{"e", 0}, Dict{"i", 0}, Dict{"o", 0}, Dict{"u", 0},  Dict{"y", 0}};
+        std::sort(vec.begin(), vec.end());
+        for(auto &elem : vec){
+            auto item{std::find(l.begin(), l.end(), elem)};
+            if(item != l.end()){
+                switch (elem) {
+                    case 'a':{
+                        dict[0].count++;
+                        break;
+                    }
+                    case 'e':{
+                        dict[1].count++;
+                        break;
+                    }
+                    case 'i':{
+                        dict[2].count++;
+                        break;
+                    }
+                    case 'o':{
+                        dict[3].count++;
+                        break;
+                    }
+                    case 'u':{
+                        dict[4].count++;
+                        break;
+                    }
+                    case 'y':{
+                        dict[5].count++;
+                        break;
+                    }
+                    default:{
+                        break;
+                    }
+                }
+            }
+        }
+        for (auto &elem : dict){
+            std::cout << elem.letter << ": " << elem.count << std::endl;
+        }
+        fin.close();
         timer.print();
     }
 
